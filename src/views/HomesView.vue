@@ -36,26 +36,56 @@ watch(homesStore.filterParams, () => {
 </script>
 
 <template>
-  <el-row>
-    <el-col>
-      <home-filter />
+  <div class="homes">
+    <home-filter />
 
-      <el-pagination
-        background
-        layout="prev, pager, next, ->, total"
-        :page-size="homesStore.homes.meta.per_page"
-        :total="homesStore.homes.meta.total"
-        v-model:current-page="homesStore.filterParams.page"
-        :disabled="loading"
-      />
+    <el-row>
+      <el-col>
+        <el-card>
+          <el-row justify="space-between">
+            <el-col :xs="24" :md="12">
+              <el-pagination
+                background
+                layout="pager, ->"
+                :page-size="homesStore.homes.meta.per_page"
+                :total="homesStore.homes.meta.total"
+                v-model:current-page="homesStore.filterParams.page"
+                :disabled="loading"
+                :pager-count="5"
+              />
+            </el-col>
 
-      <el-table :data="homesStore.homes.data" v-loading="loading" height="500">
-        <el-table-column
-          v-for="field in homesStore.tableFields"
-          :label="field.label"
-          :prop="field.key"
-        />
-      </el-table>
-    </el-col>
-  </el-row>
+            <el-col :xs="24" :md="12"
+              ><div class="home-pagination-total">
+                Total: {{ homesStore.homes.meta.total }}
+              </div></el-col
+            >
+          </el-row>
+
+          <el-table
+            :data="homesStore.homes.data"
+            v-loading="loading"
+            height="500"
+            stripe
+          >
+            <el-table-column
+              v-for="field in homesStore.tableFields"
+              :label="field.label"
+              :prop="field.key"
+            />
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
+
+<style>
+.homes-pagination {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.home-pagination-total {
+  text-align: end;
+}
+</style>
